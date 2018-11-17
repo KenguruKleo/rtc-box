@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 
 const fileServer = new(nodeStatic.Server)('./client/build/');
 const app = http.createServer(function(req, res) {
+  console.log('request', req);
   fileServer.serve(req, res);
 }).listen(8080);
 
