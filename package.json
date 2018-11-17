@@ -1,7 +1,7 @@
 {
-  "name": "webrtc-codelab",
+  "name": "rtc-box",
   "version": "0.0.1",
-  "description": "WebRTC codelab",
+  "description": "Box for exchange smiles",
   "scripts": {
     "start": "node ./app/index.js"
   },
