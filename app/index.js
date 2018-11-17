@@ -5,11 +5,13 @@ const nodeStatic = require('node-static');
 const http = require('http');
 const socketIO = require('socket.io');
 
+const congig = require('./config');
+
 const fileServer = new(nodeStatic.Server)('./client/build/');
 const app = http.createServer(function(req, res) {
   console.log('request', req);
   fileServer.serve(req, res);
-}).listen(8080);
+}).listen(congig.APP_PORT);
 
 const io = socketIO.listen(app);
 io.sockets.on('connection', function(socket) {
