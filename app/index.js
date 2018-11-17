@@ -5,7 +5,7 @@ const nodeStatic = require('node-static');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const fileServer = new(nodeStatic.Server)('../client/build/');
+const fileServer = new(nodeStatic.Server)('./client/build/');
 const app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
 }).listen(8080);
