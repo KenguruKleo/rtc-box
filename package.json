@@ -3,10 +3,27 @@
   "version": "0.0.1",
   "description": "Box for exchange smiles",
   "scripts": {
-    "start": "node ./app/index.js"
+    "start": "node ./app/index.js",
+    "build": "webpack --config ./client/webpack.config.js"
   },
   "dependencies": {
+    "@babel/core": "^7.1.6",
+    "autoprefixer": "^9.3.1",
+    "babel-loader": "^8.0.4",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^1.0.1",
+    "extract-loader": "^3.0.0",
+    "file-loader": "^2.0.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.4",
     "node-static": "^0.7.10",
-    "socket.io": "^2.0.4"
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "socket.io": "^2.0.4",
+    "style-loader": "^0.23.1",
+    "styles-loader": "^1.0.0",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
   }
 }

@@ -1,4 +1,4 @@
-'use strict';
+import './assets/styles/main.css';
 
 var isChannelReady = false;
 var isInitiator = false;
