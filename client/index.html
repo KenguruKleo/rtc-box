@@ -3,8 +3,6 @@
 
 <head>
 
-  <title>Realtime communication with WebRTC</title>
-
 </head>
 
 <body>
@@ -12,6 +10,11 @@
   <div class="videos">
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
+  </div>
+
+  <div class="mute">
+    <input id="mute" type="checkbox" />
+    <label for="mute">Mute</label>
   </div>
 
   <!-- This file is automatically added/served when running "node index.js". -->

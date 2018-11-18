@@ -32,3 +32,24 @@ video {
   bottom: 10px;
   right: 10px;
 }
+
+.mute {
+  display: table;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.mute input {
+  display: table-cell;
+  vertical-align: middle;
+  margin-bottom: 5px;
+  height: 15px;
+}
+
+.mute label {
+  display: table-cell;
+  vertical-align: middle;
+  color: white;
+  height: 15px;
+}

@@ -5,6 +5,7 @@
   "scripts": {
     "postinstall": "npm run build",
     "start": "node ./app/index.js",
+    "build:dev": "nodemon --exec npm run build --watch client/src --watch client/index.html",
     "build": "webpack --config ./client/webpack.config.js"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "mini-css-extract-plugin": "^0.4.4",
     "node-sass": "^4.10.0",
     "node-static": "^0.7.10",
+    "nodemon": "^1.18.6",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "socket.io": "^2.0.4",

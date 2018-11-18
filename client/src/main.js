@@ -1,32 +1,32 @@
 import './assets/styles/main.css';
 
-var isChannelReady = false;
-var isInitiator = false;
-var isStarted = false;
-var localStream;
-var pc;
-var remoteStream;
-var turnReady;
+let isChannelReady = false;
+let isInitiator = false;
+let isStarted = false;
+let localStream;
+let pc;
+let remoteStream;
+let turnReady;
 
-var pcConfig = {
+let pcConfig = {
   'iceServers': [{
     'urls': 'stun:stun.l.google.com:19302'
   }]
 };
 
 // Set up audio and video regardless of what devices are present.
-var sdpConstraints = {
+const sdpConstraints = {
   offerToReceiveAudio: true,
   offerToReceiveVideo: true
 };
 
 /////////////////////////////////////////////
 
-var room = 'foo';
+let room = 'foo';
 // Could prompt for room name:
 // room = prompt('Enter room name:');
 
-var socket = io.connect();
+const socket = io.connect();
 
 if (room !== '') {
   socket.emit('create or join', room);
@@ -78,7 +78,7 @@ socket.on('message', function(message) {
   } else if (message.type === 'answer' && isStarted) {
     pc.setRemoteDescription(new RTCSessionDescription(message));
   } else if (message.type === 'candidate' && isStarted) {
-    var candidate = new RTCIceCandidate({
+    let candidate = new RTCIceCandidate({
       sdpMLineIndex: message.label,
       candidate: message.candidate
     });
@@ -90,11 +90,12 @@ socket.on('message', function(message) {
 
 ////////////////////////////////////////////////////
 
-var localVideo = document.querySelector('#localVideo');
-var remoteVideo = document.querySelector('#remoteVideo');
+const localVideo = document.querySelector('#localVideo');
+const remoteVideo = document.querySelector('#remoteVideo');
+const muteButton = document.querySelector('#mute');
 
 navigator.mediaDevices.getUserMedia({
-  audio: false,
+  audio: true,
   video: true
 })
 .then(gotStream)
@@ -112,8 +113,9 @@ function gotStream(stream) {
   }
 }
 
-var constraints = {
-  video: true
+let constraints = {
+  video: true,
+  audio: true,
 };
 
 console.log('Getting user media with constraints', constraints);
@@ -154,7 +156,6 @@ function createPeerConnection() {
   } catch (e) {
     console.log('Failed to create PeerConnection, exception: ' + e.message);
     alert('Cannot create RTCPeerConnection object.');
-    return;
   }
 }
 
@@ -200,8 +201,8 @@ function onCreateSessionDescriptionError(error) {
 }
 
 function requestTurn(turnURL) {
-  var turnExists = false;
-  for (var i in pcConfig.iceServers) {
+  let turnExists = false;
+  for (let i in pcConfig.iceServers) {
     if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
       turnExists = true;
       turnReady = true;
@@ -211,10 +212,10 @@ function requestTurn(turnURL) {
   if (!turnExists) {
     console.log('Getting TURN server from ', turnURL);
     // No TURN server. Get one from computeengineondemand.appspot.com:
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        var turnServer = JSON.parse(xhr.responseText);
+        let turnServer = JSON.parse(xhr.responseText);
         console.log('Got TURN server: ', turnServer);
         pcConfig.iceServers.push({
           'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
@@ -255,3 +256,9 @@ function stop() {
   pc.close();
   pc = null;
 }
+
+muteButton.addEventListener('change', event => {
+  const muted = event.target.checked;
+  console.log('Mute flag:', muted);
+  localVideo.srcObject.getAudioTracks()[0].enabled = !muted;
+});
