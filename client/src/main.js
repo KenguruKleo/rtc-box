@@ -6,18 +6,11 @@ let isStarted = false;
 let localStream;
 let pc;
 let remoteStream;
-let turnReady;
 
 let pcConfig = {
   'iceServers': [{
     'urls': 'stun:stun.l.google.com:19302'
   }]
-};
-
-// Set up audio and video regardless of what devices are present.
-const sdpConstraints = {
-  offerToReceiveAudio: true,
-  offerToReceiveVideo: true
 };
 
 /////////////////////////////////////////////
@@ -148,7 +141,7 @@ window.onbeforeunload = function() {
 
 function createPeerConnection() {
   try {
-    pc = new RTCPeerConnection(null);
+    pc = new RTCPeerConnection(pcConfig);
     pc.onicecandidate = handleIceCandidate;
     pc.onaddstream = handleRemoteStreamAdded;
     pc.onremovestream = handleRemoteStreamRemoved;
@@ -198,35 +191,6 @@ function setLocalAndSendMessage(sessionDescription) {
 
 function onCreateSessionDescriptionError(error) {
   trace('Failed to create session description: ' + error.toString());
-}
-
-function requestTurn(turnURL) {
-  let turnExists = false;
-  for (let i in pcConfig.iceServers) {
-    if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
-      turnExists = true;
-      turnReady = true;
-      break;
-    }
-  }
-  if (!turnExists) {
-    console.log('Getting TURN server from ', turnURL);
-    // No TURN server. Get one from computeengineondemand.appspot.com:
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        let turnServer = JSON.parse(xhr.responseText);
-        console.log('Got TURN server: ', turnServer);
-        pcConfig.iceServers.push({
-          'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
-          'credential': turnServer.password
-        });
-        turnReady = true;
-      }
-    };
-    xhr.open('GET', turnURL, true);
-    xhr.send();
-  }
 }
 
 function handleRemoteStreamAdded(event) {
