@@ -13,6 +13,16 @@ let pcConfig = {
   }]
 };
 
+
+const constraints = {
+  video: {
+    width: 720,
+    height: 480,
+    frameRate: 5,
+  },
+  audio: true,
+};
+
 /////////////////////////////////////////////
 
 let room = 'foo';
@@ -87,10 +97,7 @@ const localVideo = document.querySelector('#localVideo');
 const remoteVideo = document.querySelector('#remoteVideo');
 const muteButton = document.querySelector('#mute');
 
-navigator.mediaDevices.getUserMedia({
-  audio: true,
-  video: true
-})
+navigator.mediaDevices.getUserMedia(constraints)
 .then(gotStream)
 .catch(function(e) {
   alert('getUserMedia() error: ' + e.name);
@@ -105,11 +112,6 @@ function gotStream(stream) {
     maybeStart();
   }
 }
-
-let constraints = {
-  video: true,
-  audio: true,
-};
 
 console.log('Getting user media with constraints', constraints);
 
