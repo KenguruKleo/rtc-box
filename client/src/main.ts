@@ -1,10 +1,12 @@
 import './assets/styles/main.css';
+import { mediaQuality } from './constants';
+import * as io from 'socket.io-client';
 
 let isChannelReady = false;
 let isInitiator = false;
 let isStarted = false;
-let localStream;
-let pc;
+let localStream:any;
+let pc:any;
 let remoteStream;
 
 let pcConfig = {
@@ -13,15 +15,6 @@ let pcConfig = {
   }]
 };
 
-
-const constraints = {
-  video: {
-    width: 720,
-    height: 480,
-    frameRate: 5,
-  },
-  audio: true,
-};
 
 /////////////////////////////////////////////
 
@@ -36,39 +29,39 @@ if (room !== '') {
   console.log('Attempted to create or  join room', room);
 }
 
-socket.on('created', function(room) {
+socket.on('created', function(room:string) {
   console.log('Created room ' + room);
   isInitiator = true;
 });
 
-socket.on('full', function(room) {
+socket.on('full', function(room:string) {
   console.log('Room ' + room + ' is full');
 });
 
-socket.on('join', function (room){
+socket.on('join', function (room:string){
   console.log('Another peer made a request to join room ' + room);
   console.log('This peer is the initiator of room ' + room + '!');
   isChannelReady = true;
 });
 
-socket.on('joined', function(room) {
+socket.on('joined', function(room:string) {
   console.log('joined: ' + room);
   isChannelReady = true;
 });
 
-socket.on('log', function(array) {
+socket.on('log', function(array:string) {
   console.log.apply(console, array);
 });
 
 ////////////////////////////////////////////////
 
-function sendMessage(message) {
+function sendMessage(message:any) {
   console.log('Client sending message: ', message);
   socket.emit('message', message);
 }
 
 // This client receives a message
-socket.on('message', function(message) {
+socket.on('message', function(message:any) {
   console.log('Client received message:', message);
   if (message === 'got user media') {
     maybeStart();
@@ -93,17 +86,17 @@ socket.on('message', function(message) {
 
 ////////////////////////////////////////////////////
 
-const localVideo = document.querySelector('#localVideo');
-const remoteVideo = document.querySelector('#remoteVideo');
-const muteButton = document.querySelector('#mute');
+const localVideo: HTMLVideoElement = document.querySelector('#localVideo');
+const remoteVideo: HTMLVideoElement = document.querySelector('#remoteVideo');
+const muteButton: HTMLInputElement = document.querySelector('#mute');
 
-navigator.mediaDevices.getUserMedia(constraints)
+navigator.mediaDevices.getUserMedia(mediaQuality)
 .then(gotStream)
 .catch(function(e) {
   alert('getUserMedia() error: ' + e.name);
 });
 
-function gotStream(stream) {
+function gotStream(stream:MediaStream) {
   console.log('Adding local stream.');
   localStream = stream;
   localVideo.srcObject = stream;
@@ -113,7 +106,7 @@ function gotStream(stream) {
   }
 }
 
-console.log('Getting user media with constraints', constraints);
+console.log('Getting user media with constraints', mediaQuality);
 
 function maybeStart() {
   console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
@@ -148,7 +141,7 @@ function createPeerConnection() {
   }
 }
 
-function handleIceCandidate(event) {
+function handleIceCandidate(event:any) {
   console.log('icecandidate event: ', event);
   if (event.candidate) {
     sendMessage({
@@ -162,7 +155,7 @@ function handleIceCandidate(event) {
   }
 }
 
-function handleCreateOfferError(event) {
+function handleCreateOfferError(event:any) {
   console.log('createOffer() error: ', event);
 }
 
@@ -179,23 +172,23 @@ function doAnswer() {
   );
 }
 
-function setLocalAndSendMessage(sessionDescription) {
+function setLocalAndSendMessage(sessionDescription:any) {
   pc.setLocalDescription(sessionDescription);
   console.log('setLocalAndSendMessage sending message', sessionDescription);
   sendMessage(sessionDescription);
 }
 
-function onCreateSessionDescriptionError(error) {
-  trace('Failed to create session description: ' + error.toString());
+function onCreateSessionDescriptionError(error:any) {
+  console.log('Failed to create session description: ' + error.toString());
 }
 
-function handleRemoteStreamAdded(event) {
+function handleRemoteStreamAdded(event:any) {
   console.log('Remote stream added.');
   remoteStream = event.stream;
   remoteVideo.srcObject = remoteStream;
 }
 
-function handleRemoteStreamRemoved(event) {
+function handleRemoteStreamRemoved(event:any) {
   console.log('Remote stream removed. Event: ', event);
 }
 
@@ -218,7 +211,7 @@ function stop() {
 }
 
 muteButton.addEventListener('change', event => {
-  const muted = event.target.checked;
+  const muted = (<HTMLInputElement>event.target).checked;
   console.log('Mute flag:', muted);
-  localVideo.srcObject.getAudioTracks()[0].enabled = !muted;
+    (<MediaStream>localVideo.srcObject).getAudioTracks()[0].enabled = !muted;
 });

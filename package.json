@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@babel/core": "^7.1.6",
+    "@types/socket.io": "^2.1.0",
+    "@types/socket.io-client": "^1.4.32",
+    "@types/webrtc": "0.0.23",
     "autoprefixer": "^9.3.1",
     "babel-loader": "^8.0.4",
     "copy-webpack-plugin": "^4.6.0",
@@ -22,10 +25,15 @@
     "node-static": "^0.7.10",
     "nodemon": "^1.18.6",
     "postcss-loader": "^3.0.0",
+    "rxjs": "^6.3.3",
     "sass-loader": "^7.1.0",
     "socket.io": "^2.0.4",
+    "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.2.1",
     "webpack": "^4.25.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }

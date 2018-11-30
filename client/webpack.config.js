@@ -7,7 +7,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: [
-    path.resolve(__dirname, './src/main.js'),
+    path.resolve(__dirname, './src/main.ts'),
   ],
   output: {
     filename: 'static/bundle.[hash].js',
@@ -19,10 +19,15 @@ module.exports = {
       path.resolve(__dirname),
       'node_modules',
     ],
-    extensions: ['.js', '.jsx', '.json', '.css'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.css'],
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.(jsx|js)?$/,
         include: path.join(__dirname, 'src'),
