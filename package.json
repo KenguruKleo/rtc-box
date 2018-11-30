@@ -2,6 +2,9 @@
   "name": "rtc-box",
   "version": "0.0.1",
   "description": "Box for exchange smiles",
+  "engines" : {
+    "node" : "8.*.*"
+  },
   "scripts": {
     "postinstall": "npm run build",
     "start": "node ./app/index.js",
